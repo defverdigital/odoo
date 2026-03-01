@@ -1,0 +1,23 @@
+app = "odoo-ce"
+
+[build]
+  builder = "heroku/buildpacks:20"
+
+[env]
+DB_HOST = "db.bkavzcfnxjoaojlrluxx.supabase.co"
+DB_PORT = "5432"
+DB_USER = "postgres"
+DB_PASSWORD = "@nHjMz65ED%kXF"
+DB_NAME = "postgres"
+
+[[services]]
+  internal_port = 8000
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
