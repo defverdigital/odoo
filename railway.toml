@@ -10,6 +10,9 @@ DB_USER = "postgres"
 DB_PASSWORD = "@nHjMz65ED%kXF"
 DB_NAME = "postgres"
 
+[deploy]
+  start = "python3 odoo-bin -c odoo.conf"
+
 [[services]]
   internal_port = 8000
   protocol = "tcp"
