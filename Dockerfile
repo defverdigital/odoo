@@ -1,64 +1,25 @@
-asn1crypto==1.5.1
-Babel==2.17.0
-cbor2==5.6.2
-chardet==5.2.0
-cryptography==42.0.8
-docutils==0.20.1
-freezegun==1.5.1
-geoip2==2.9.0
-gevent==24.11.1
-greenlet==3.1.1
-idna==3.6
-Jinja2==3.1.2
-libsass==0.22.0
-lxml==5.2.1
-lxml-html-clean
-MarkupSafe==2.1.5
-num2words==0.5.13
-ofxparse==0.21
-openpyxl==3.1.2
-passlib==1.7.4
-Pillow==11.1.0
-polib==1.1.1
-psutil==5.9.8
-psycopg2==2.9.10
-pyopenssl==24.1.0
-PyPDF==5.4.0
-pyserial==3.5
-python-dateutil==2.8.2
-python-magic==0.4.27
-ldap3==2.9.1
-python-stdnum==1.19
-pytz
-pyusb==1.2.1
-qrcode==7.4.2
-reportlab==4.1.0
-requests==2.31.0
-rjsmin==1.2.0
-urllib3==2.0.7
-vobject==0.9.6.1
-Werkzeug==3.0.1
-xlrd==2.0.1
-XlsxWriter==3.1.9
-xlwt==1.3.0
-zeep==4.3.1
+# Gebruik een lichte Python 3.13 image
+FROM python:3.13-slim
 
-# Extra dependencies
-cffi>=1.12
-maxminddb>=3.1.0
-zope.event
-zope.interface
-docopt>=0.6.2
-beautifulsoup4
-six
-et-xmlfile
-pyasn1>=0.4.6
-typing-extensions
-pypng
-charset-normalizer<4,>=2
-certifi>=2017.4.17
-attrs>=17.2.0
-isodate>=0.5.4
-platformdirs>=1.4.0
-requests-toolbelt>=0.7.1
-requests-file>=1.5.1
+# Werkdirectory in de container
+WORKDIR /app
+
+# Kopieer je code naar de container
+COPY . .
+
+# Installeer OS-dependencies die Odoo nodig heeft
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libldap2-dev \
+    libsasl2-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Installeer Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Start Odoo met jouw config
+CMD ["python3", "odoo/odoo-bin", "-c", "odoo.conf"]
